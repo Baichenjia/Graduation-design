@@ -1,0 +1,35 @@
+<table class="table table-hover" style="font-family:'微软雅黑';font-size: 16px;margin-top: 20px;width:100%">
+    <thead>
+   	    <tr>
+       		<th>类别</th>
+            <th>候选词</th>
+    	</tr>
+	</thead>
+	<tbody>
+        {% for group, words in cluster_group_result %}
+    	<tr>
+      	    <td style="width: 15%;">{{ group }}</td>
+            <td style="width: 85%;">{{ words }}</td>
+    	</tr>
+    	{% endfor %}
+	</tbody>
+</table>
+
+<p>&nbsp;</p>
+
+<table class="table table-hover" style="font-family:'微软雅黑';font-size: 16px;margin-top: 20px;width:50%">
+    <thead>
+   	    <tr>
+       		<th>标签</th>
+            <th>TextRank权值</th>
+    	</tr>
+	</thead>
+	<tbody>
+    {% for word, score in cluster_result_labels %}
+    <tr>
+      	<td>{{ word }}</td>
+        <td>{{ score }}</td>
+    </tr>
+    {% endfor %}
+	</tbody>
+</table>

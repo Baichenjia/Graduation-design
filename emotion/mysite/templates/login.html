@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>新浪微博情感分析系统</title> 
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<script type="text/javascript" name="baidu-tc-cerfication" data-appid="5975294" src="http://apps.bdimg.com/cloudaapi/lightapp.js"></script>
+<style>
+
+/*背景图片的设置*/
+.backpic {
+	font-family:"Microsoft Yahei";
+	font-size:12px;
+	margin:0;
+	background-size:120%,150%; 
+	background-repeat:no-repeat;
+	background-attachment:fixed;
+	background-position:0; 
+	background: url('/images/login_1.jpg');
+	
+	/*
+	FILTER: Alpha( style=1,opacity=25,finishOpacity=100,startX=50,finishX= 100,startY=50,finishY=100);
+	background-color: skyblue;
+	*/
+	}
+ul {
+	padding:0;
+	margin:0;
+    }
+ul li {
+	list-style-type:none;
+}
+a {
+	text-decoration:none;
+}
+a:hover {
+	text-decoration:none;
+	color:#000F00;
+}
+.cl{ clear: both;}
+input[type="text"]:focus, input[type="password"]:focus {
+	outline:none;
+}
+
+
+.login {
+	margin:0 auto;
+	width:370px;
+	border:2px solid #eee;
+	border-bottom:none;
+	position:relative;
+}
+.header {
+	height:50px;
+	border-bottom:1px solid #e2e2e2;
+	position:relative;
+	font-family:"Microsoft Yahei";
+}
+.header .switch {
+	height:45px;
+	position:absolute;
+	left:60px;
+	bottom:0;
+	font-size:16px;
+}
+.header .switch #switch_qlogin {
+	margin-right: 85px;
+}
+.header .switch .switch_btn {
+	color:#999;
+	display:inline-block;
+	height:45px;
+	line-height:45px;
+	outline:none;
+	*hide-focus:expression(this.hideFocus=true);
+}
+.header .switch .switch_btn_focus {
+	color:#333;
+	display:inline-block;
+	height:45px;
+	line-height:45px;
+	outline:none;
+	*hide-focus:expression(this.hideFocus=true);
+}
+.header .switch .switch_btn:hover {
+	color:#333;
+	text-decoration:none;
+}
+.header .switch .switch_btn_focus:hover {
+	text-decoration:none;
+}
+#switch_bottom {
+	position:absolute;
+	bottom:-1px;
+	border-bottom:2px solid #848484;
+}
+.web_login {
+	width:370px;
+	position:relative;
+}
+#web_login{
+	_left:60px;
+	}
+.web_login .login_form {
+	width:272px;
+	margin:0 auto;
+}
+.web_login .reg_form {
+	width:300px;
+	margin:0 auto;
+}
+.web_login .input-tips {
+	float:left;
+	margin-top:10px;
+	width:50px;
+	height:42px;
+	font-size:16px;
+	line-height:42px;
+	font-family:"Hiragino Sans GB", "Microsoft Yahei";
+}
+.web_login .input-tips2 {
+	float:left;
+	text-align:right;
+	padding-right:10px;
+	width:75px;
+	height:30px;
+	font-size:16px;
+	margin-top:10px;
+	clear:both;
+	line-height:30px;
+	font-family:"Hiragino Sans GB", "Microsoft Yahei";
+}
+.web_login .inputOuter {
+	width:200px;
+	height:42px;
+	margin-top:10px;
+	float:left;
+	
+}
+.web_login .inputOuter2 {
+	width:200px;
+	margin-top:6px;
+	margin-top:5px\9;
+	float:left;
+	
+}
+.web_login .inputstyle {
+	width:200px;
+	height:38px;
+	padding-left:5px;
+	line-height:30px;line-height:38px;
+	border:1px solid #D7D7D7;
+	background:#fff;
+	color:#333;
+	border-radius:2px;
+	font-family:Verdana, Tahoma, Arial;
+	font-size:16px;
+	ime-mode:disabled;/*表示禁用输入法输入*/
+}
+.web_login input.inputstyle2:focus,.web_login input.inputstyle:focus{
+	border:1px solid #198BD4;
+	box-shadow:0 0 2px #198BD4;
+}
+.web_login .inputstyle2 {
+	width:200px;
+	height:34px;
+	padding-left:5px;
+	line-height:34px;
+	border:1px solid #D7D7D7;
+	background:#fff;
+	color:#333;
+	border-radius:2px;
+	font-family:Verdana, Tahoma, Arial;
+	font-size:16px;
+	ime-mode:disabled;/*表示禁用输入法输入*/
+}
+.web_login .uinArea {
+	height:55px;
+	position:relative;
+	z-index:10;
+}
+.web_login .pwdArea {
+	height:55px;
+	margin-bottom:10px;
+	position:relative;
+	z-index:3;
+}
+.web_qr_login {
+	position:relative;
+	overflow:hidden;
+}
+
+.cue {
+	height:40px;
+	line-height:40px;
+	font-size:14px;
+	border:1px #CCCCCC solid;
+	margin-top:10px;margin-bottom:5px;
+	text-align:center;
+	font-family:"Hiragino Sans GB", "Microsoft Yahei";
+}
+.login {
+	background-color:#ffffff;
+}
+
+h1{
+	margin:80px auto 50px auto;
+	text-align:center;
+	color:#fff;
+	margin-left:-25px;
+	font-size:35px;
+	font-weight: bold;
+	text-shadow: 0px 1px 1px #555;
+	}
+h1 sup{
+    font-size: 18px;
+    font-style: normal;
+    position: absolute;
+    margin-left: 10px;
+	}
+.login {
+	border:0;padding:5px 0;
+	background: #fff;
+	margin: 0 auto;
+	-webkit-box-shadow: 1px 1px 2px 0 rgba(0, 0, 0, .3);
+	box-shadow: 1px 1px 2px 0 rgba(0, 0, 0, .3);}
+
+.web_login{
+	padding-bottom:20px;
+	}
+
+.jianyi{
+	color:#fff;
+	text-align:center;
+	margin-top:25px;
+	color:#B3B8C4;
+	}
+.reg_form li {
+	height: 55px;
+	}
+.cue {
+	margin-top: 15px;
+	margin-bottom: 10px;
+	border:1px solid #eee;
+	border-radius:3px;
+}
+.web_login input.inputstyle2:focus, .web_login input.inputstyle:focus {
+	border: 1px solid #5796f;
+	box-shadow: 0 0 0;
+}
+.web_login .reg_form {
+	width: 300px;
+	margin: 0 auto;
+}
+.web_login .inputstyle2 {
+	border-radius:2px;width:210px;
+}
+.web_login .input-tips2 {
+	padding-right: 5px;
+	width: 80px;
+	_width: 75px;
+	font-size:12px;
+}
+.button_blue
+{
+	display:inline-block;
+	float:left;
+	height:41px;
+	border-radius:4px;
+	background:#2795dc;
+	border:none;
+	cursor:pointer;
+	border-bottom:3px solid #0078b3;
+	color:#fff;
+	font-size:16px;
+	padding:0 10px;
+	text-align:center;
+	outline:none;font-family: "Microsoft Yahei",Arial, Helvetica, sans-serif;
+}
+input.button_blue:hover{
+	background:#0081c1;
+	border-bottom:3px solid #006698;
+	color:#fff;
+	text-decoration:none;
+}
+a.zcxy {
+	text-decoration: underline;
+	line-height:58px;
+	margin-left:15px;
+    color: #959ca8;
+}
+.web_login .login_form {
+	margin-top:30px;
+}
+.web_login .uinArea {
+	height: 60px;
+}
+.header .switch{
+	left:70px;
+}
+</style>
+
+<script src="http://libs.baidu.com/jquery/1.9.1/jquery.min.js"></script>
+<script>
+
+//设置背景图片变化 url('/images/login_1.jpg');
+var Nowframe=0;
+var MaxFrame=3;
+var location1 = "url('/images/";
+var pic = "login_";
+var location2 = ".jpg')";      //三个字符串，预备后面连接成地址
+var now = new String;
+var now_location = new String;
+function change_back(){
+	Nowframe = Nowframe + 1;
+	if(Nowframe == MaxFrame){
+		Nowframe = 0;    //设置爱数字循环
+	}
+	now = String(Nowframe);
+	now_location = location1.concat(pic,now,location2);
+	document.getElementById("backpic").style.background=now_location;
+}
+var myVar=setInterval(function(){change_back()},200000000);
+
+
+
+$(document).ready(function(){
+	$('#switch_qlogin').click(function(){  //快速登录按钮的响应
+		$('#switch_login').removeClass("switch_btn_focus").addClass('switch_btn');
+		$('#switch_qlogin').removeClass("switch_btn").addClass('switch_btn_focus');  //设置文字的突出和不突出
+		$('#switch_bottom').animate({left:'0px',width:'70px'});  //短下划线移动
+		$('#qlogin').css('display','none');  //快速注册部分消失
+		$('#web_qr_login').css('display','block'); //快速登录的部分显示
+	});
+	$('#switch_login').click(function(){  //快速注册的响应按钮
+		$('#switch_login').removeClass("switch_btn").addClass('switch_btn_focus');
+		$('#switch_qlogin').removeClass("switch_btn_focus").addClass('switch_btn');  //设置文字的突出和不突出
+		$('#switch_bottom').animate({left:'154px',width:'70px'}); //短下划线移动
+		$('#qlogin').css('display','block');  //快速注册的部分显示
+		$('#web_qr_login').css('display','none');  //快速登录的部分消失
+		});
+	/*
+	if(getParam("a")=='0')
+	{
+		$('#switch_login').trigger('click');
+	}
+    */
+});
+
+
+
+/*
+function logintab(){  //定义函数
+	scrollTo(0);  //页面滚动到网页的开始部分
+	$('#switch_qlogin').removeClass("switch_btn_focus").addClass('switch_btn');
+	$('#switch_login').removeClass("switch_btn").addClass('switch_btn_focus');  //设置字体突出和不突出
+	$('#switch_bottom').animate({left:'154px',width:'96px'});  //短斜线
+	$('#qlogin').css('display','none');  //隐藏快速注册部分
+	$('#web_qr_login').css('display','block');   //显示快速登录部分
+}
+*/
+
+/*
+////根据参数名获得该参数 pname等于想要的参数名 
+function getParam(pname) { 
+	//search得到的是url中query部分  substr()返回一个从指定位置开始的指定长度的子字符串这里设置为1，是为了把url中的?号去掉 
+    var params = location.search.substr(1); 
+	//split()将一个字符串分割为子字符串，然后将结果作为字符串数组返回,这里就是把query部分以&为分割符
+    var ArrParam = params.split('&'); 
+    if (ArrParam.length == 1) { 
+        //只有一个参数的情况 
+        return params.split('=')[1]; 
+    } 
+    else { 
+         //多个参数参数的情况 
+        for (var i = 0; i < ArrParam.length; i++) { 
+            if (ArrParam[i].split('=')[0] == pname) { 
+                return ArrParam[i].split('=')[1]; 
+            } 
+        } 
+    } 
+}  
+*/
+
+var reMethod = "GET",
+	pwdmin = 6;
+
+$(document).ready(function() {   //注册表单验证
+	$('#reg').click(function() {   //同意协议并注册按钮的相应事件
+		if ($('#user').val() == "") {  //如果用户名为空
+			$('#user').focus().css({   //更改用户名控件的相应CSS信息
+				border: "1px solid red",
+				boxShadow: "0 0 2px red"
+			});
+			$('#userCue').html("<font color='red'><b>×用户名不能为空</b></font>");  //更改userCue的HTML文字
+			return false;    //返回false
+		}
+		if ($('#user').val().length < 4 || $('#user').val().length > 16) {  //用户名的长度限制
+			$('#user').focus().css({
+				border: "1px solid red",
+				boxShadow: "0 0 2px red"
+			});
+			$('#userCue').html("<font color='red'><b>×用户名位4-16字符</b></font>"); 
+			return false;
+		}
+		/*
+		$.ajax({
+			type: reMethod,
+			url: "/member/ajaxyz.php",
+			data: "uid=" + $("#user").val() + '&temp=' + new Date(),
+			dataType: 'html',
+			success: function(result) {
+				if (result.length > 2) {
+					$('#user').focus().css({
+						border: "1px solid red",
+						boxShadow: "0 0 2px red"
+					});$("#userCue").html(result);
+					return false;
+				} else {
+					$('#user').css({
+						border: "1px solid #D7D7D7",
+						boxShadow: "none"
+					});
+				}
+
+			}
+		});
+        */
+
+		if ($('#passwd').val().length < pwdmin) {   //检验密码的长度
+			$('#passwd').focus();
+			$('#userCue').html("<font color='red'><b>密码不能小于" + pwdmin + "位</b></font>");
+			return false;
+		}
+		if ($('#passwd2').val() != $('#passwd').val()) {  //检验两次密码是否一致
+			$('#passwd2').focus();
+			$('#userCue').html("<font color='red'><b>×两次密码不一致！</b></font>");
+			return false;
+		}
+		var sqq = /^[1-9]{1}[0-9]{4,9}$/;    //正则表达式，检验QQ号码的格式
+		if (!sqq.test($('#qq').val()) || $('#qq').val().length < 5 || $('#qq').val().length > 12) {
+			$('#qq').focus().css({
+				border: "1px solid red",
+				boxShadow: "0 0 2px red"
+			});
+			$('#userCue').html("<font color='red'><b>×QQ号码格式不正确</b></font>");return false;
+		} 
+		else {
+			$('#qq').css({
+				border: "1px solid #D7D7D7",
+				boxShadow: "none"
+			});
+		}
+		$('#regUser').submit(); //提交form2表单
+	});
+});
+</script>
+</head>
+
+<body class="backpic" id="backpic">
+
+
+<h1>新浪微博情感分析系统<sup>V1.0</sup></h1>
+<!--页面第一部分   快速登录和快速注册-->
+<div class="login" style="margin-top:50px;"> 
+    <div class="header">
+        <div class="switch" id="switch">
+        <a class="switch_btn_focus" id="switch_qlogin" href="javascript:void(0);" >快速登录</a>
+		<a class="switch_btn" id="switch_login" href="javascript:void(0);;">快速注册</a>
+        <!--快速登录下面的那条线-->
+        <div class="switch_bottom" id="switch_bottom" style="position: absolute; width: 64px; left: 0px;"></div>
+    </div>
+</div>    
+  
+<!--页面第二部分-->
+	<!--整个中间的白色的登录界面的布局-->
+    <div class="web_qr_login" id="web_qr_login" style="display: block; height: 235px;">
+    	<!--快速登录部分-->
+        <div class="web_login">       
+    		<div class="login-box">
+    			<div class="login_form">
+					<form action="/login/" name="loginform" accept-charset="utf-8" id="login_form" class="loginForm" method="post">
+    					<input type="hidden" name="did" value="0"/>
+    					<input type="hidden" name="to" value="log"/>
+                        <p style="color:red">
+                        {% if error %}
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            {% for err in error %}
+                                {{ err }}
+                            {% endfor %}
+                        {% endif %}
+    					</p>
+                        <div class="uinArea">
+    						<label class="input-tips" for="u">帐号：</label>
+   				 			<div class="inputOuter" id="uArea">
+    							<input type="text" id="u" name="username" class="inputstyle"/>
+    						</div>
+    					</div>
+    					<div class="pwdArea" id="pwdArea">
+    						<label class="input-tips" for="p">密码：</label> 
+    						<div class="inputOuter" id="pArea">                
+    							<input type="password" id="p" name="p" class="inputstyle"/>
+    						</div>
+    					</div>          
+    					<div style="padding-left:50px;margin-top:20px;">
+                            <input type="submit" value="登 录" style="width:150px;" class="button_blue">
+                            <a href="/{{ contact }}/" class="zcxy" target="_blank">联系我们</a>
+                        </div>
+    				</form>
+    			</div>
+    		</div>            
+    	</div>  
+        <!--快速登录部分结束-->
+    </div>
+
+  <!--快速注册部分-->
+    <div class="qlogin" id="qlogin" style="display: none; ">
+    	<div class="web_login">
+        	<form name="form2" id="regUser" accept-charset="utf-8"  action="/register/" method="post">
+				<input type="hidden" name="to" value="reg"/>
+				<input type="hidden" name="did" value="0"/>
+        		<ul class="reg_form" id="reg-ul">
+        			<div id="userCue" class="cue">请您填写以下信息</div>
+                        <p style="color:red">
+                            {% if error2 %}
+                                <script>
+                                    $(document).ready(function(){
+                                            $("#userCue").hide();
+                                            $('#switch_login').removeClass("switch_btn").addClass('switch_btn_focus');
+		                                    $('#switch_qlogin').removeClass("switch_btn_focus").addClass('switch_btn');  //设置文字的突出和不突出
+	                                    	$('#switch_bottom').animate({left:'154px',width:'70px'}); //短下划线移动
+		                                    $('#qlogin').css('display','block');  //快速注册的部分显示
+		                                    $('#web_qr_login').css('display','none');  //快速登录的部分消失
+                                    });
+                                </script>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                {% for err in error2 %}
+                                    {{ err }}
+                                {% endfor %}
+                            {% endif %}
+                        </p>
+                		<li>	
+            				<label for="user"  class="input-tips2">用户名：</label>
+                    		<div class="inputOuter2">
+                        		<input type="text" id="user" name="user" maxlength="16" class="inputstyle2"/>
+                    		</div> 
+                		</li>
+                		<li>
+                			<label for="passwd" class="input-tips2">密码：</label>
+                    		<div class="inputOuter2">
+                        		<input type="password" id="passwd"  name="passwd" maxlength="16" class="inputstyle2"/>
+                    		</div>
+                		</li>
+                		<li>
+                			<label for="passwd2" class="input-tips2">确认密码：</label>
+                    		<div class="inputOuter2">
+                        		<input type="password" id="passwd2" name="passwd2" maxlength="16" class="inputstyle2" />
+                    		</div>
+                		</li>
+                		<li>
+                 			<label for="qq" class="input-tips2">QQ：</label>
+                    		<div class="inputOuter2">  
+                       			<input type="text" id="qq" name="qq" maxlength="10" class="inputstyle2"/>
+                    		</div>
+                		</li>
+                		<li>
+                    		<div class="inputArea">
+                        		<input type="button" id="reg"  style="margin-top:10px;margin-left:85px;" class="button_blue" value="同意协议并注册"/>
+                                <a href=# class="zcxy" target="_top">注册协议</a>
+                    		</div>
+                		</li>
+                		<div class="cl"></div>
+            	</ul>
+        	</form> 
+    	</div>
+    </div>
+    <!--快速注册部分结束-->
+</div>
+<div class="jianyi">*欢迎您使用情感分析系统 __author_by 白辰甲*</div>
+</div>
+</body>
+</html>

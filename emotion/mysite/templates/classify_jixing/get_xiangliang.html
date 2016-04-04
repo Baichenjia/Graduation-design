@@ -1,0 +1,35 @@
+<table class="table table-hover" style="font-family:'微软雅黑';font-size: 16px;margin-top: 20px;width:100%">
+<thead>
+   	<tr>
+      	<th>neg_a</th><th>neg_b</th><th>neg_d</th><th>neg_i</th>
+        <th>neg_l</th><th>neg_n</th><th>neg_v</th><th>neg_z</th>
+        <th>pos_a</th><th>pos_b</th><th>pos_d</th><th>pos_i</th>
+        <th>neg_l</th><th>pos_n</th><th>pos_v</th><th>pos_z</th>
+        <th>but</th><th>no</th>
+    </tr>
+</thead>
+<tbody>
+   {% for neg_a,neg_b,neg_d,neg_i,neg_l,neg_n,neg_v,neg_z,pos_a,pos_b,pos_d,pos_i,pos_l,pos_n,pos_v,pos_z,but,no in xiangliang %}
+   <tr>
+     <td>{{ neg_a }}</td>
+     <td>{{ neg_b }}</td>
+     <td>{{ neg_d }}</td>
+     <td>{{ neg_i }}</td>
+     <td>{{ neg_l }}</td>
+     <td>{{ neg_n }}</td>
+     <td>{{ neg_v }}</td>
+     <td>{{ neg_z }}</td>
+     <td>{{ pos_a }}</td>
+     <td>{{ pos_b }}</td>
+     <td>{{ pos_d }}</td>
+     <td>{{ pos_i }}</td>
+     <td>{{ neg_l }}</td>
+     <td>{{ pos_n }}</td>
+     <td>{{ pos_v }}</td>
+     <td>{{ pos_z }}</td>
+     <td>{{ but }}</td>
+     <td>{{ no }}</td>
+     </tr>
+    {% endfor %}
+</tbody>
+</table>

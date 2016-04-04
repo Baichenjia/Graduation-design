@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Search</title>
+</head>
+<body>
+    {% if errors %}
+        <div style = "color:red">
+            <ul>
+                {% for error in errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </ul>>
+        </div>
+    {% endif %}
+    <!--action=""  意味着表单将提交给与当前页面相同的URL-->
+    <form action="" method="get">
+        <input type="text" name="q">
+        <input type="submit" value="Search">
+    </form>
+</body>
+</html>

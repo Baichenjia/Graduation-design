@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<<html lang="zh-CN">>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--没有下载本地的bootstripe环境，用网络存储文件-->
+    <link href="http://apps.bdimg.com/libs/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <script src="http://apps.bdimg.com/libs/jquery/2.0.0/jquery.min.js"></script>
+    <script src="http://apps.bdimg.com/libs/prototype/1.7.1.0/prototype.js"></script>
+    <script src="http://apps.bdimg.com/libs/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="http://apps.bdimg.com/libs/Chart.js/0.2.0/Chart.min.js"></script>
+	<title>微博博主情感倾向分析系统</title>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" /><!--说明编码-->
+	<style>	<!--CSS样式表-->
+	html{	
+		margin: 0;
+		padding: 0;
+		border: 0;   /*去除边框和内边距*/
+		vertical-align: baseline;  /*统一进行基线对齐*/
+		display: block;
+		font: inherit;
+	}	
+	body {
+		font-size: 13.5pt;
+		background-color: #E6E6FA;   /*页面背景颜色*/
+		font-family: 'Microsoft YaHei', sans-serif;  /*字体*/
+		letter-spacing: -1px;
+		line-height: 1;
+		font: inherit;
+	}
+	h1 { /*标题颜色*/
+		color: #007897;
+		font-weight: normal;
+	}
+	a {/*当链接未被选中时*/
+		color: #5d93a2;
+		text-decoration: none;/*无下划线*/
+	}
+	a:hover {        /*当鼠标指向链接*/
+		text-decoration: underline;/*当连接选中时出现下划线*/
+	}
+	#header-wrapper {   /*标题的外边框*/
+		position:absolute;
+		left:0px;
+		top:0px;             /*指定位置，位于左上角，位置固定*/
+		background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#007b9d), to(#FF9933));  /*设置颜色渐变*/
+		margin-top: 0px;
+		height:148px
+	}
+	#header{      /*内边框，文字背景*/
+		position: relative;
+		margin: 2.5% 0 2.5% 0;
+		padding: 0 40px 0 40px;
+		border-radius: 10px;    /*边框宽度*/
+		border: solid 1px #006e8b;   /*边框样式和颜色*/
+		box-shadow: inset 0px 0px 0px 1px #12a0bf, 0px 1px 4px 0px rgba(0,0,0,0.10);  /*内阴影*/
+		background-color: #007b9d;   /*背景色*/
+		background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#008ead), to(#007b9d));  /*渐变色*/
+		height: 86px;
+	}
+	#header h1{
+		position: absolute;
+		left: 40px;
+		top: 0;       /*设置文字的位置*/
+		letter-spacing: -2px;
+		font-weight: normal;
+		margin: 0;
+		padding: 0;
+		border: 0;
+		font-family: 'Microsoft YaHei';
+		-webkit-margin-before: 0.15em;
+		-webkit-margin-after: 0.25em;  /*上边距和下边距的数值是0.67倍字体高度*/
+		-webkit-margin-start: 0px;
+		-webkit-margin-end: 0px;   /*定义为左右边距都为0PX*/
+	}
+	#header h1 a {
+		font-size: 1.7em;
+	}
+	#header nav a:hover {    /*当标题的连接被选中时*/
+		background-color: #0882a1;
+		box-shadow: inset 0px 1px 5px 1px rgba(0,0,0,0.05), 0px 0px 5px 1px rgba(255,255,255,0.05);
+	}
+	#header nav a {
+		display: inline-block;
+		text-decoration: none;   /*去除下划线*/
+		color: #fff;
+		padding: 25px 13px 25px 13px;
+		outline: 0;
+		font-size:2.4em
+	}
+	.weibo{    /*标题  微博情感分析  的样式*/
+		color: #fff;
+		letter-spacing: -2px;
+	}
+	.steps{    /*其余分标题的样式*/
+		position: absolute;
+		right: 40px;
+		top: 1px;
+		line-height: 84px;
+		font-size: 1.3em;
+		font: inherit;
+		vertical-align: baseline;
+	}
+	.current-page{     /*当标题被选中时的样式表*/
+		background-color: #007897;
+		background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#007b99), to(#007897));  /*线性渐变*/
+		box-shadow: inset 0px 1px 5px 1px rgba(0,0,0,0.1), 0px 0px 5px 1px rgba(255,255,255,0.1);
+	}
+	#footer-wrapper {
+		padding: 3% 0 3% 0;
+
+	}
+	.link-list{    /*列表总样式*/
+		list-style: none;   /*去除列表前的圆点标记*/
+		margin-left:400px;
+	}
+	ul.link-list li {
+		padding: 0.75em 0.4em 0 0.4em;
+		margin: 0.75em 0.4em 0 0.4em;
+		float:left; /* 往左浮动 */
+	}
+	#copyright {
+		text-align: center;
+		color: #A6A88F;
+		border-top: solid 1px #ced0b7;
+		padding: 1em 0 0 0;
+		margin: 1% 0 0 0;
+	}
+	.row1{
+		height:400px;
+	}
+   .row2{
+		height:1000px;
+	}
+	.row{
+		margin-left:20px;
+		margin-top:3px;
+		padding:7px;
+		font-family:"宋体", "微软雅黑", "新宋体", "迷你简启体", "楷体";
+		font-size:20px;
+	}
+	.table{
+		 style="font-family:'微软雅黑';
+		 font-size: 16px;
+		 margin-top: 20px;
+		 height: 40px;
+		 width:100px
+	}
+	</style>
+    <script type="text/javascript">
+        function get_zhuguan() {
+           new Ajax.Updater('get_zhuguan', '/jixing_get_zhuguan/', {asynchronous:true});
+        }
+        function get_xiangliang() {
+           new Ajax.Updater('get_xiangliang', '/jixing_get_xiangliang/', {asynchronous:true});
+        }
+        function get_results() {
+           new Ajax.Updater('get_results', '/jixing_get_results/', {asynchronous:true});
+        }
+    </script>
+   
+    
+	</head>
+    
+	<body>
+	<!-- 上方列表 -->
+		<div id="header-wrapper">
+			<div style="width: 1200px;height: 148px;margin-left: 74.5px;margin-right: 74.5px;">
+						<header id="header">
+							<h1><a href="/{{ index }}/" class="weibo">博主情感分析</a></h1>
+							<nav class="steps" style="width: 683px; ">   <!--横向导航栏列表-->
+								<a href="/{{ step1 }}/">数据爬取</a><!--表示当前被选中的元素-->
+								<a href="/{{ step2 }}/">情感词典</a>
+								<a href="/{{ step3 }}/" class="current-page">SVM分类</a>
+								<a href="/{{ step4 }}/">词典分类</a>
+								<a href="/{{ step5 }}/">标签提取</a><!--其余元素当前位选中-->
+							</nav>
+						</header>
+			</div>
+		</div>
+        
+       
+        
+        <p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><!--空标签占用行，准备填充内容-->
+         <p>&nbsp;</p><p>&nbsp;</p>
+         
+        <!--训练数据-->
+		<div class="container">
+        <h1>训练数据</h1>
+        <h4>训练数据出自哈尔滨工业大学语言处理实验室</h4>
+        <h4>训练数据的处理步骤是：预处理————保留主观文本————去除停用词————保存极性————向量化</h4>
+        </div>
+         <div class="container">
+        	<button onclick="get_zhuguan();" style="float:left;" type="submit" class="btn btn-primary btn-lg">获取训练数据</button>
+        </div>
+        <!--训练数据部分-->
+        <div class="container">
+            <div class="row1 bg-success">
+        		<div class="container" style="overflow-x: auto; overflow-y: auto;height: 400px;width:100%">
+       			    <div id = "get_zhuguan">
+                        {% include 'classify_jixing/get_zhuguan.html' %}
+      		        </div>
+                </div>
+            </div>
+         </div>
+
+         <p>&nbsp;</p>
+         <div class="container">
+         <button type="button" onclick="get_xiangliang();" class="btn btn-primary btn-lg">
+  			<span class="glyphicon glyphicon-hand-down" aria-hidden="true"></span> 向量化
+		</button>
+        </div>
+        <!--显示向量化后的向量-->
+        <div class="container">
+            <div class="row1 bg-success">
+        		<div class="container" style="overflow-x: auto; overflow-y: auto;height: 400px;width:100%">
+       			    <div id = "get_xiangliang">
+                        {% include 'classify_jixing/get_xiangliang.html' %}
+      		        </div>
+      		   </div>
+            </div>
+         </div>
+         <p>&nbsp;</p>
+         <div class="container">
+         <button type="button" onclick="get_results();" class="btn btn-primary btn-lg">
+  			<span class="glyphicon glyphicon-hand-down" aria-hidden="true"></span> 极性分析
+		</button>
+        </div>
+        
+        <!--对爬取到的微博进行极性分析-->
+        <div class="container">
+            <div class="row2 bg-success">
+        		<div class="container" style="overflow-x: auto; overflow-y: auto;height: 1000px;width:100%">
+       			    <div id = "get_results">
+                        {% include 'classify_jixing/get_results.html' %}
+      		        </div>
+      		   </div>
+            </div>
+         </div>
+        
+        <p>&nbsp;</p>
+    <!--
+         <div class="container">
+         <button type="button" onclick="myFunction()" class="btn btn-primary btn-lg">
+  			<span class="glyphicon glyphicon-hand-down" aria-hidden="true"></span> 准确率测试
+		</button>
+        </div>
+   -->
+
+
+     	<canvas id="myChart" class="myChart" width="400" height="400"></canvas>
+
+
+        
+	    <!--下方脚注-->
+		<div id="footer-wrapper">
+
+			<ul class="link-list"><!--总列表样式-->
+            	<li><a href="http://weibo.com/"><b>友情链接: </b></a></li>
+ 				<li><a href="http://weibo.com/">新浪微博</a></li>
+                <li><a href="http://t.qq.com/">腾讯微博</a></li>
+                <li><a href="http://tieba.baidu.com/">百度贴吧</a></li>
+                <li><a href="http://www.renren.com/">人人网</a></li>
+			</ul>	
+		</div>
+    <!--最后的尾注，版权说明-->
+		<div id="copyright">  
+			&copy; Untitled. All rights reserved. | collect from:
+            <a href=# title="情感分析">情感分析</a> | Images: <a href="#">白辰甲</a>
+		</div>
+</body>
+
+ <script type="text/javascript">
+		var ctx = document.getElementById("myChart").getContext("2d");
+		new Chart(ctx).Bar(data,options);
+		var data = {
+			labels : ["January","February","March","April","May","June","July"],
+			datasets : [
+				{
+					fillColor : "rgba(220,220,220,0.5)",
+					strokeColor : "rgba(220,220,220,1)",
+					data : [65,59,90,81,56,55,40]
+				},
+				{
+					fillColor : "rgba(151,187,205,0.5)",
+					strokeColor : "rgba(151,187,205,1)",
+					data : [28,48,40,19,96,27,100]
+				}
+			]
+		}
+		Bar.defaults = {
+				
+	//Boolean - If we show the scale above the chart data			
+	scaleOverlay : false,
+	
+	//Boolean - If we want to override with a hard coded scale
+	scaleOverride : false,
+	
+	//** Required if scaleOverride is true **
+	//Number - The number of steps in a hard coded scale
+	scaleSteps : null,
+	//Number - The value jump in the hard coded scale
+	scaleStepWidth : null,
+	//Number - The scale starting value
+	scaleStartValue : null,
+
+	//String - Colour of the scale line	
+	scaleLineColor : "rgba(0,0,0,.1)",
+	
+	//Number - Pixel width of the scale line	
+	scaleLineWidth : 1,
+
+	//Boolean - Whether to show labels on the scale	
+	scaleShowLabels : false,
+	
+	//Interpolated JS string - can access value
+	scaleLabel : "<%=value%>",
+	
+	//String - Scale label font declaration for the scale label
+	scaleFontFamily : "'Arial'",
+	
+	//Number - Scale label font size in pixels	
+	scaleFontSize : 12,
+	
+	//String - Scale label font weight style	
+	scaleFontStyle : "normal",
+	
+	//String - Scale label font colour	
+	scaleFontColor : "#666",	
+	
+	///Boolean - Whether grid lines are shown across the chart
+	scaleShowGridLines : true,
+	
+	//String - Colour of the grid lines
+	scaleGridLineColor : "rgba(0,0,0,.05)",
+	
+	//Number - Width of the grid lines
+	scaleGridLineWidth : 1,	
+
+	//Boolean - If there is a stroke on each bar	
+	barShowStroke : true,
+	
+	//Number - Pixel width of the bar stroke	
+	barStrokeWidth : 2,
+	
+	//Number - Spacing between each of the X value sets
+	barValueSpacing : 5,
+	
+	//Number - Spacing between data sets within X values
+	barDatasetSpacing : 1,
+	
+	//Boolean - Whether to animate the chart
+	animation : true,
+
+	//Number - Number of animation steps
+	animationSteps : 60,
+	
+	//String - Animation easing effect
+	animationEasing : "easeOutQuart",
+
+	//Function - Fires when the animation is complete
+	onAnimationComplete : null
+	
+}
+	
+	
+    </script>
+</html>

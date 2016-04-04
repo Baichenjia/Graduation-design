@@ -1,0 +1,16 @@
+<table class="table table-hover" style="font-family:'微软雅黑';font-size: 16px;margin-top: 20px">
+    <thead>
+     <tr>
+        <th style="width: 10%;">序号</th>
+        <th>微博内容</th>
+     </tr>
+    </thead>
+    <tbody>
+     {% for key,value in contents %}
+        <tr>
+            <td>{{key}}</td>
+            <td>{{value}}</td>
+        </tr>
+     {% endfor %}
+    </tbody>
+</table>

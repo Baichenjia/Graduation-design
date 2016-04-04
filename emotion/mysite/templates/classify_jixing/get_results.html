@@ -1,0 +1,18 @@
+<table class="table table-hover" style="font-family:'微软雅黑';font-size: 16px;margin-top: 20px;width:100%">
+<thead>
+   	<tr>
+       	<th>句子</th>
+        <th>向量</th>
+        <th>极性</th>
+    </tr>
+</thead>
+<tbody>
+    {% for num1,num2,num3 in results %}
+    <tr>
+      <td style="width: 62%;">{{ num1 }}</td>
+      <td style="width: 28%;">{{ num2 }}</td>
+      <td style="width: 10%;">{{ num3 }}</td>
+    </tr>
+    {% endfor %}
+</tbody>
+</table>

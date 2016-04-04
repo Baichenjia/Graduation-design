@@ -1,0 +1,16 @@
+<table class="table table-hover" style="font-family:'微软雅黑';font-size: 16px;margin-top: 20px;width:100%">
+<thead>
+   	<tr>
+       	<th>句子</th>
+        <th>极性</th>
+    </tr>
+</thead>
+<tbody>
+    {% for sent,jixing in sents %}
+    <tr>
+      <td style="width: 90%;">{{ sent }}</td>
+      <td style="width: 10%;">{{ jixing }}</td>
+    </tr>
+    {% endfor %}
+</tbody>
+</table>

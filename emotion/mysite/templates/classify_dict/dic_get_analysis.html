@@ -1,0 +1,46 @@
+<table class="table table-hover" style="font-family:'微软雅黑';font-size: 16px;margin-top: 20px;width:100%">
+    <thead>
+	    <tr>
+		    <th>指标名称</th>
+            <th>数值</th>
+            <th>意义</th>
+	    </tr>
+    </thead>
+	<tbody>
+    	<tr>
+        	<td style="width: 20%;font-size:17px;">积极情感微博数量</td>
+            <td style="width: 20%;">{{ pos_number }}</td>
+            <td style="width: 60%;">{{ text_pos_number }}</td>
+    	</tr>
+        <tr>
+      		<td style="width: 20%;font-size:17px;">消极情感微博数量</td>
+            <td style="width: 20%;">{{ neg_number }}</td>
+            <td style="width: 60%;">{{ text_neg_number }}</td>
+    	</tr>
+    	<tr>
+      		<td style="width: 20%;font-size:17px;">中性情感微博数量</td>
+            <td style="width: 20%;">{{ mid_number }}</td>
+            <td style="width: 60%;">{{ text_mid_number }}</td>
+    	</tr>
+        <tr>
+      		<td style="width: 20%;font-size:17px;">积极情感平均得分</td>
+            <td style="width: 20%;">{{ pos_mean }}</td>
+            <td style="width: 60%;">{{ text_pos_mean }}</td>
+    	</tr>
+        <tr>
+      		<td style="width: 20%;font-size:17px;">消极情感平均得分</td>
+            <td style="width: 20%;">{{ neg_mean }}</td>
+            <td style="width: 60%;">{{ text_neg_mean }}</td>
+    	</tr>
+        <tr>
+      		<td style="width: 20%;font-size:17px;">情感得分方差</td>
+            <td style="width: 20%;">{{ total_variance }}</td>
+            <td style="width: 60%;">{{ text_total_var }}</td>
+    	</tr>
+        <tr>
+      		<td style="width: 20%;font-size:17px;">整体情感倾向</td>
+            <td style="width: 20%;">{{ total_mean }}</td>
+            <td style="width: 60%;">{{ text_total_mean }}</td>
+    	</tr>
+	</tbody>
+</table>

@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<<html lang="zh-CN">>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--没有下载本地的bootstripe环境，用网络存储文件-->
+    <link href="http://apps.bdimg.com/libs/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <script src="http://apps.bdimg.com/libs/jquery/2.0.0/jquery.min.js"></script>
+    <script src="http://apps.bdimg.com/libs/prototype/1.7.1.0/prototype.js"></script>
+    <script src="http://apps.bdimg.com/libs/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="http://apps.bdimg.com/libs/Chart.js/0.2.0/Chart.min.js"></script>
+	<title>微博博主情感倾向分析系统</title>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" /><!--说明编码-->
+	<style>	<!--CSS样式表-->
+	html{	
+		margin: 0;
+		padding: 0;
+		border: 0;   /*去除边框和内边距*/
+		vertical-align: baseline;  /*统一进行基线对齐*/
+		display: block;
+		font: inherit;
+	}	
+	body {
+		font-size: 13.5pt;
+		background-color: #E6E6FA;   /*页面背景颜色*/
+		font-family: 'Microsoft YaHei', sans-serif;  /*字体*/
+		letter-spacing: -1px;
+		line-height: 1;
+		font: inherit;
+	}
+	h1 { /*标题颜色*/
+		color: #007897;
+		font-weight: normal;
+	}
+	a {/*当链接未被选中时*/
+		color: #5d93a2;
+		text-decoration: none;/*无下划线*/
+	}
+	a:hover {        /*当鼠标指向链接*/
+		text-decoration: underline;/*当连接选中时出现下划线*/
+	}
+	#header-wrapper {   /*标题的外边框*/
+		position:absolute;
+		left:0px;
+		top:0px;             /*指定位置，位于左上角，位置固定*/
+		background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#007b9d), to(#FF9933));  /*设置颜色渐变*/
+		margin-top: 0px;
+		height:148px
+	}
+	#header{      /*内边框，文字背景*/
+		position: relative;
+		margin: 2.5% 0 2.5% 0;
+		padding: 0 40px 0 40px;
+		border-radius: 10px;    /*边框宽度*/
+		border: solid 1px #006e8b;   /*边框样式和颜色*/
+		box-shadow: inset 0px 0px 0px 1px #12a0bf, 0px 1px 4px 0px rgba(0,0,0,0.10);  /*内阴影*/
+		background-color: #007b9d;   /*背景色*/
+		background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#008ead), to(#007b9d));  /*渐变色*/
+		height: 86px;
+	}
+	#header h1{
+		position: absolute;
+		left: 40px;
+		top: 0;       /*设置文字的位置*/
+		letter-spacing: -2px;
+		font-weight: normal;
+		margin: 0;
+		padding: 0;
+		border: 0;
+		font-family: 'Microsoft YaHei';
+		-webkit-margin-before: 0.15em;
+		-webkit-margin-after: 0.25em;  /*上边距和下边距的数值是0.67倍字体高度*/
+		-webkit-margin-start: 0px;
+		-webkit-margin-end: 0px;   /*定义为左右边距都为0PX*/
+	}
+	#header h1 a {
+		font-size: 1.7em;
+	}
+	#header nav a:hover {    /*当标题的连接被选中时*/
+		background-color: #0882a1;
+		box-shadow: inset 0px 1px 5px 1px rgba(0,0,0,0.05), 0px 0px 5px 1px rgba(255,255,255,0.05);
+	}
+	#header nav a {
+		display: inline-block;
+		text-decoration: none;   /*去除下划线*/
+		color: #fff;
+		padding: 25px 13px 25px 13px;
+		outline: 0;
+		font-size:2.4em
+	}
+	.weibo{    /*标题  微博情感分析  的样式*/
+		color: #fff;
+		letter-spacing: -2px;
+	}
+	.steps{    /*其余分标题的样式*/
+		position: absolute;
+		right: 40px;
+		top: 1px;
+		line-height: 84px;
+		font-size: 1.3em;
+		font: inherit;
+		vertical-align: baseline;
+	}
+	.current-page{     /*当标题被选中时的样式表*/
+		background-color: #007897;
+		background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#007b99), to(#007897));  /*线性渐变*/
+		box-shadow: inset 0px 1px 5px 1px rgba(0,0,0,0.1), 0px 0px 5px 1px rgba(255,255,255,0.1);
+	}
+	#footer-wrapper {
+		padding: 3% 0 3% 0;
+
+	}
+	.link-list{    /*列表总样式*/
+		list-style: none;   /*去除列表前的圆点标记*/
+		margin-left:400px;
+	}
+	ul.link-list li {
+		padding: 0.75em 0.4em 0 0.4em;
+		margin: 0.75em 0.4em 0 0.4em;
+		float:left; /* 往左浮动 */
+	}
+	#copyright {
+		text-align: center;
+		color: #A6A88F;
+		border-top: solid 1px #ced0b7;
+		padding: 1em 0 0 0;
+		margin: 1% 0 0 0;
+	}
+	.row1{
+		height:400px;
+	}
+    .row2{
+		height:600px;
+	}
+	.row{
+		margin-left:20px;
+		margin-top:3px;
+		padding:7px;
+		font-family:"宋体", "微软雅黑", "新宋体", "迷你简启体", "楷体";
+		font-size:20px;
+	}
+	.table{
+		 style="font-family:'微软雅黑';
+		 font-size: 16px;
+		 margin-top: 20px;
+		 height: 40px;
+		 width:100px
+	}
+	</style>
+
+    <script type="text/javascript">
+        function dic_get_quanzhi() {
+           new Ajax.Updater('level_one', '/dic_level_one/', {asynchronous:true});
+           new Ajax.Updater('level_two', '/dic_level_two/', {asynchronous:true});
+           new Ajax.Updater('level_three', '/dic_level_three/', {asynchronous:true});
+           new Ajax.Updater('level_four', '/dic_level_four/', {asynchronous:true});
+           new Ajax.Updater('level_five', '/dic_level_five/', {asynchronous:true});
+           new Ajax.Updater('level_six', '/dic_level_six/', {asynchronous:true});
+        }
+        function dic_get_result() {
+           new Ajax.Updater('dic_get_result', '/dic_get_result/', {asynchronous:true});
+        }
+        function dic_get_analysis(){
+           new Ajax.Updater('dic_get_analysis', '/dic_get_analysis/', {asynchronous:true});
+        }
+
+    </script>
+   
+    
+	</head>
+    
+	<body>
+	<!-- 上方列表 -->
+		<div id="header-wrapper">
+			<div style="width: 1200px;height: 148px;margin-left: 74.5px;margin-right: 74.5px;">
+						<header id="header">
+							<h1><a href="/{{ index }}/" class="weibo">博主情感分析</a></h1>
+							<nav class="steps" style="width: 683px; ">   <!--横向导航栏列表-->
+								<a href="/{{ step1 }}/">数据爬取</a><!--表示当前被选中的元素-->
+								<a href="/{{ step2 }}/">情感词典</a>
+								<a href="/{{ step3 }}/">SVM分类</a>
+								<a href="/{{ step4 }}/" class="current-page">词典分类</a>
+								<a href="/{{ step5 }}/">标签提取</a>
+							</nav>
+						</header>
+			</div>
+		</div>
+        
+       
+        
+        <p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><!--空标签占用行，准备填充内容-->
+         <p>&nbsp;</p><p>&nbsp;</p>
+         
+       	<!--程度副词权值部分-->
+		<div class="container">
+        <h1>程度词权值</h1>
+        <h4>程度副词划分为四个等级：级别一权值为2，级别二权值为1.75，级别三权值为1.5，级别四权值为1.2，级别五权值为0.5，级别六权值为-1（情感反转）</h4>
+        </div>
+         <div class="container">
+        	<button onclick="dic_get_quanzhi();" style="float:left;" type="submit" class="btn btn-primary btn-lg">获取程度词</button>
+        </div>
+        <p>&nbsp;</p>
+        <div class="container">
+            <div class="row1 bg-success">
+            		<!--级别一程度副词-->
+       			    <div class="col-md-2">
+        				<div class="container" style="overflow-x: auto; overflow-y: auto;height: 350px;width:100%">
+                        	 <div id="level_one">
+                                {% include 'classify_dict/dic_level_one.html' %}
+                        	</div>
+      			   		</div>
+                	</div>
+                    <!--级别二程度副词-->
+                     <div class="col-md-2">
+        				<div class="container" style="overflow-x: auto; overflow-y: auto;height: 350px;width:100%">
+                        	 <div id="level_two">
+                            	{% include 'classify_dict/dic_level_two.html' %}
+                        	</div>
+      			   		</div>
+                	</div>
+                    <!--级别三程度副词-->
+                     <div class="col-md-2">
+        				<div class="container" style="overflow-x: auto; overflow-y: auto;height: 350px;width:100%">
+                        	 <div id="level_three">
+                            	{% include 'classify_dict/dic_level_three.html' %}
+                        	</div>
+      			   		</div>
+                	</div>
+                    <!--级别四程度副词-->
+                     <div class="col-md-2">
+        				<div class="container" style="overflow-x: auto; overflow-y: auto;height: 350px;width:100%">
+                        	 <div id="level_four">
+                            	{% include 'classify_dict/dic_level_four.html' %}
+                        	</div>
+      			   		</div>
+                	</div>
+                    <!--级别五程度副词-->
+                     <div class="col-md-2">
+        				<div class="container" style="overflow-x: auto; overflow-y: auto;height: 350px;width:100%">
+                        	 <div id="level_five">
+                            	{% include 'classify_dict/dic_level_five.html' %}
+                        	</div>
+      			   		</div>
+                	</div>
+                    <!--级别六程度副词-->
+                     <div class="col-md-2">
+        				<div class="container" style="overflow-x: auto; overflow-y: auto;height: 350px;width:100%">
+                        	 <div id="level_six">
+                            	{% include 'classify_dict/dic_level_six.html' %}
+                        	</div>
+      			   		</div>
+                	</div>
+            </div>
+         </div>
+         
+        <p>&nbsp;</p>
+        
+        <!--程序运行结果部分-->
+		<div class="container">
+        <h1>微博情感倾向打分</h1>
+        <h4>打分规则：积极倾向微博得分为整数，消极倾向微博得分为负数，得分越高，情感倾向越明显</h4>
+        <h4><b>步骤：</b></h4>
+        <h4>1.读取微博语句，对微博句子进行分句。</h4>
+        <h4>2.对于每个分句，查找情感词，记录积极还是消极，以及位置。</h4>
+        <h4>3.在情感词前查找程度词，找到就停止搜寻。为程度词设权值，乘以情感值。</h4>
+        <h4>4.往情感词前查找否定词，找完全部否定词，若数量为奇数，乘以-1，若为偶数，乘以1。</h4>
+        <h4>5.判断分句结尾是否有感叹号，有叹号则往前寻找情感词，有则相应的情感值+2。</h4>
+        <h4>6.对所有分句的情感词进行求和，作为该条微博的情感值。</h4>
+        </div>
+         <div class="container">
+        	<button onclick="dic_get_result();" style="float:left;" type="submit" class="btn btn-primary btn-lg">情感倾向打分</button>
+        </div>
+        <p>&nbsp;</p>
+        <div class="container">
+            <div class="row2 bg-success">
+        		<div class="container" style="overflow-x: auto; overflow-y: auto;height: 600px;width:100%">
+                     <div id="dic_get_result">
+                         {% include 'classify_dict/dic_get_result.html' %}
+                     </div>
+                </div>
+            </div>
+         </div>
+         
+          <p>&nbsp;</p>
+        <!--程序运行结果部分-->
+		<div class="container">
+        <h1>评价指标</h1>
+        <h4>指标分别为：积极、消极、中性微博数量，积极、消极得分的平均值，以及情感波动情况</h4>
+        </div>
+         <div class="container">
+        	<button onclick="dic_get_analysis();" style="float:left;" type="submit" class="btn btn-primary btn-lg">获取评价指标</button>
+        </div>
+        <div class="container">
+            <div class="row2 bg-success">
+                <div id="dic_get_analysis">
+                     {% include 'classify_dict/dic_get_analysis.html' %}
+                </div>
+            </div>
+         </div>
+		
+        
+         <p>&nbsp;</p> <p>&nbsp;</p> <p>&nbsp;</p> <p>&nbsp;</p> <p>&nbsp;</p> <p>&nbsp;</p> <p>&nbsp;</p>
+        
+        
+        
+        
+	    <!--下方脚注-->
+		<div id="footer-wrapper">
+            <div class="container">
+			<ul class="link-list"><!--总列表样式-->
+            	<li><a href="http://weibo.com/"><b>友情链接: </b></a></li>
+ 				<li><a href="http://weibo.com/">新浪微博</a></li>
+                <li><a href="http://t.qq.com/">腾讯微博</a></li>
+                <li><a href="http://tieba.baidu.com/">百度贴吧</a></li>
+                <li><a href="http://www.renren.com/">人人网</a></li>
+			    </ul>
+            </div>
+		</div>
+    <!--最后的尾注，版权说明-->
+		<div id="copyright">  
+			&copy; Untitled. All rights reserved. | collect from:
+            <a href=# title="情感分析">情感分析</a> | Images: <a href="#">白辰甲</a>
+		</div>
+</body>
+
+</html>

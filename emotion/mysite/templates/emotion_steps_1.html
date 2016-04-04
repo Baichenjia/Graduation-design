@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<<html lang="zh-CN">>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--没有下载本地的bootstripe环境，用网络存储文件-->
+    <link href="http://apps.bdimg.com/libs/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <script src="http://apps.bdimg.com/libs/jquery/2.0.0/jquery.min.js"></script>
+    <script src="http://apps.bdimg.com/libs/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+	<title>微博博主情感倾向分析系统</title>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" /><!--说明编码-->
+	<style>	<!--CSS样式表-->
+	html{	
+		margin: 0;
+		padding: 0;
+		border: 0;   /*去除边框和内边距*/
+		vertical-align: baseline;  /*统一进行基线对齐*/
+		display: block;
+		font: inherit;
+	}	
+	body {
+		font-size: 13.5pt;
+		background-color: #E6E6FA;   /*页面背景颜色*/
+		font-family: 'Microsoft YaHei', sans-serif;  /*字体*/
+		letter-spacing: -1px;
+		line-height: 1;
+		font: inherit;
+	}
+	h1 { /*标题颜色*/
+		color: #007897;
+		font-weight: normal;
+	}
+	a {/*当链接未被选中时*/
+		color: #5d93a2;
+		text-decoration: none;/*无下划线*/
+	}
+	a:hover {        /*当鼠标指向链接*/
+		text-decoration: underline;/*当连接选中时出现下划线*/
+	}
+	#header-wrapper {   /*标题的外边框*/
+		position:absolute;
+		left:0px;
+		top:0px;             /*指定位置，位于左上角，位置固定*/
+		background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#007b9d), to(#FF9933));  /*设置颜色渐变*/
+		margin-top: 0px;
+		height:148px
+	}
+	#header{      /*内边框，文字背景*/
+		position: relative;
+		margin: 2.5% 0 2.5% 0;
+		padding: 0 40px 0 40px;
+		border-radius: 10px;    /*边框宽度*/
+		border: solid 1px #006e8b;   /*边框样式和颜色*/
+		box-shadow: inset 0px 0px 0px 1px #12a0bf, 0px 1px 4px 0px rgba(0,0,0,0.10);  /*内阴影*/
+		background-color: #007b9d;   /*背景色*/
+		background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#008ead), to(#007b9d));  /*渐变色*/
+		height: 86px;
+	}
+	#header h1{
+		position: absolute;
+		left: 40px;
+		top: 0;       /*设置文字的位置*/
+		letter-spacing: -2px;
+		font-weight: normal;
+		margin: 0;
+		padding: 0;
+		border: 0;
+		font-family: 'Microsoft YaHei';
+		-webkit-margin-before: 0.15em;
+		-webkit-margin-after: 0.25em;  /*上边距和下边距的数值是0.67倍字体高度*/
+		-webkit-margin-start: 0px;
+		-webkit-margin-end: 0px;   /*定义为左右边距都为0PX*/
+	}
+	#header h1 a {
+		font-size: 1.7em;
+	}
+	#header nav a:hover {    /*当标题的连接被选中时*/
+		background-color: #0882a1;
+		box-shadow: inset 0px 1px 5px 1px rgba(0,0,0,0.05), 0px 0px 5px 1px rgba(255,255,255,0.05);
+	}
+	#header nav a {
+		display: inline-block;
+		text-decoration: none;   /*去除下划线*/
+		color: #fff;
+		padding: 25px 13px 25px 13px;
+		outline: 0;
+		font-size:2.4em
+	}
+	.weibo{    /*标题  微博情感分析  的样式*/
+		color: #fff;
+		letter-spacing: -2px;
+	}
+	.steps{    /*其余分标题的样式*/
+		position: absolute;
+		right: 40px;
+		top: 1px;
+		line-height: 84px;
+		font-size: 1.3em;
+		font: inherit;
+		vertical-align: baseline;
+	}
+	.current-page{     /*当标题被选中时的样式表*/
+		background-color: #007897;
+		background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#007b99), to(#007897));  /*线性渐变*/
+		box-shadow: inset 0px 1px 5px 1px rgba(0,0,0,0.1), 0px 0px 5px 1px rgba(255,255,255,0.1);
+	}
+	#footer-wrapper {
+		padding: 3% 0 3% 0;
+
+	}
+	.link-list{    /*列表总样式*/
+		list-style: none;   /*去除列表前的圆点标记*/
+		margin-left:400px;
+	}
+	ul.link-list li {
+		padding: 0.75em 0.4em 0 0.4em;
+		margin: 0.75em 0.4em 0 0.4em;
+		float:left; /* 往左浮动 */
+	}
+	#copyright {
+		text-align: center;
+		color: #A6A88F;
+		border-top: solid 1px #ced0b7;
+		padding: 1em 0 0 0;
+		margin: 1% 0 0 0;
+	}
+	.row1{
+
+		height:600px;
+	}
+	.row{
+		margin-left:20px;
+		margin-top:3px;
+		padding:7px;
+		font-family:"宋体", "微软雅黑", "新宋体", "迷你简启体", "楷体";
+		font-size:20px;
+	}
+	</style>
+    
+    <script type="text/javascript">
+ 		$(function(){
+  			$(":radio").click(function(){
+   				switch($(this).val())
+				{
+					case "option1":
+						document.getElementById("weibo_url").value="yaochen";
+						break;
+					case "option2":
+						document.getElementById("weibo_url").value="gaoxiaosong";
+						break;
+					case "option3":
+						document.getElementById("weibo_url").value="lenovoliujun";
+						break;
+					case "option4":
+						document.getElementById("weibo_url").value="hzzww";
+						break;
+					case "option5":
+						document.getElementById("weibo_url").value="577994538";
+						break;
+					case "option6":
+						document.getElementById("weibo_url").value="dxxxs";
+						break;
+					case "option7":
+						document.getElementById("weibo_url").value="1789965930";
+						break;
+					case "option8":
+						document.getElementById("weibo_url").value="cnrzgzs";
+						break;
+					case "option9":
+						document.getElementById("weibo_url").value="kaifulee";
+						break;
+					case "option10":
+						document.getElementById("weibo_url").value="zhyj";
+						break;
+					
+				}
+  			});
+ 		});
+	</script>
+    
+	</head>
+    
+	<body>
+	<!-- 上方列表 -->
+		<div id="header-wrapper">
+			<div style="width: 1200px;height: 148px;margin-left: 74.5px;margin-right: 74.5px;">
+						<header id="header">
+							<h1><a href="/{{ index }}/" class="weibo">博主情感分析</a></h1>
+							<nav class="steps" style="width: 683px; ">   <!--横向导航栏列表-->
+								<a href="/{{ step1 }}/" class="current-page">数据爬取</a><!--表示当前被选中的元素-->
+								<a href="/{{ step2 }}/">情感词典</a>
+								<a href="/{{ step3 }}/">SVM分类</a>
+								<a href="/{{ step4 }}/">词典分类</a>
+								<a href="/{{ step5 }}/">标签提取</a><!--其余元素当前位选中-->
+							</nav>
+						</header>
+			</div>
+		</div>
+        
+       
+        
+        <p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><!--空标签占用行，准备填充内容-->
+         <p>&nbsp;</p><p>&nbsp;</p>
+
+
+
+        <div class="container">
+        	<div class="hero-unit"></div>
+            <div class="row1 bg-success">
+            
+            	<!--左边的部分负责选择博主-->
+                <div class="col-md-4">
+                	<!--输入框部分-->
+                    <h2>请选择或输入博主的域名</h2>
+                    {% if error_subject %}   <!--如果主题有错误，则显示提示-->
+                        <div class="alert alert-danger">对不起！您没有选择域名</div>   <!--Bootstrap语句-->
+                    {% endif %}
+                    <form action="/form_crawler/" method="post">
+  						<div class="form-group">
+                            <label style="font-size:20px;">域名</label>
+    					    <input type="text"  class="form-control" id="weibo_url" name="weibo_url" placeholder="输入新浪域名">
+                        </div>
+                        <div class="form-group">
+                            <label style="font-size:20px;">页数</label>
+    					    <input type="text"  class="form-control" id="page_num" name="page_num" placeholder="2">
+					    </div>
+                        <button type="submit" style="float:right;"  class="btn btn-primary btn-lg">开始爬取微博</button>
+                    </form>
+                    <p>&nbsp;</p><p>&nbsp;</p>
+                    
+                    <!--单选框部分-->
+                    <div class="row">
+                    <label class="radio-inline">
+  						<input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"> 姚晨
+					</label>
+                    
+					<label class="radio-inline" style="margin-left:30px"> 
+  						<input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"> 高晓松
+					</label>
+                    </div>
+                    
+                     <div class="row">
+                    <label class="radio-inline">
+  						<input type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3"> 刘军
+					</label>
+					<label class="radio-inline" style="margin-left:30px">
+  						<input type="radio" name="inlineRadioOptions" id="inlineRadio4" value="option4"> 朱炜炜
+					</label>
+                    </div>
+                    
+                    <div class="row">
+                    <label class="radio-inline">
+  						<input type="radio" name="inlineRadioOptions" id="inlineRadio5" value="option5"> 洪峰
+					</label>
+					<label class="radio-inline" style="margin-left:30px">
+  						<input type="radio" name="inlineRadioOptions" id="inlineRadio6" value="option6"> 大学新鲜事
+					</label>
+                    </div>
+                    
+                    <div class="row">
+                    <label class="radio-inline">
+  						<input type="radio" name="inlineRadioOptions" id="inlineRadio7" value="option7"> 吕宏伟
+					</label>
+					<label class="radio-inline">
+  						<input type="radio" name="inlineRadioOptions" id="inlineRadio8" value="option8"> 中国之声
+					</label>
+                    </div>
+                    
+                    <div class="row">
+                    <label class="radio-inline">
+  						<input type="radio" name="inlineRadioOptions" id="inlineRadio9" value="option9"> 李开复
+					</label>
+					<label class="radio-inline">
+  						<input type="radio" name="inlineRadioOptions" id="inlineRadio10" value="option10"> 郑渊洁
+					</label>
+                    </div>
+                </div>   <!--左侧部分结束->
+                
+                <!--右边的部分显示该博主所发微博-->
+                <div class="col-md-8">
+					<table class="table table-hover" style="font-family:'微软雅黑';font-size: 16px;margin-top: 20px">
+       				 <thead>
+          				<tr>
+            				<th style="width: 10%;">序号</th>
+            				<th>微博内容</th>
+          				</tr>
+        			 </thead>
+        			 <tbody>
+                        {% for key,value in contents %}
+          				<tr>
+            				<td>{{key}}</td>
+            				<td>{{value}}</td>
+          				</tr>
+                        {% endfor %}
+        			 </tbody>
+      				</table>                
+                	
+
+                </div>
+            </div>
+        </div>
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+	<!--下方脚注-->
+		<div id="footer-wrapper">
+
+			<ul class="link-list"><!--总列表样式-->
+            	<li><a href="http://weibo.com/"><b>友情链接: </b></a></li>
+ 				<li><a href="http://weibo.com/">新浪微博</a></li>
+                <li><a href="http://t.qq.com/">腾讯微博</a></li>
+                <li><a href="http://tieba.baidu.com/">百度贴吧</a></li>
+                <li><a href="http://www.renren.com/">人人网</a></li>
+			</ul>	
+		</div>
+    <!--最后的尾注，版权说明-->
+		<div id="copyright">  
+			&copy; Untitled. All rights reserved. | collect from:
+            <a href=# title="情感分析">情感分析</a> | Images: <a href="#">白辰甲</a>
+		</div>
+</body>
+</html>
